@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Portfolio Webpage</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .profile-section {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .editable {
+            border-bottom: 1px dashed #040607;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .routine-table td, .routine-table th {
+            text-align: center;
+        }
+        .skill-badge {
+            margin: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+
+    <!-- Profile Section -->
+    <div class="profile-section mb-4">
+        <h1 class="mb-3">Profile</h1>
+        <p><strong>Name:</strong> <span class="editable" id="profile-name">Bharkavi P M</span></p>
+        <p><strong>D.O.B:</strong> <span class="editable" id="profile-dob">16/08/2005</span></p>
+        <p><strong>Place:</strong> <span class="editable" id="profile-place">Mumbai</span></p>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="profile-section mb-4">
+        <h2>Skills</h2>
+        <div>
+            <strong>Tech skills:</strong>
+            <span id="skills-list">
+                <span class="badge bg-primary skill-badge">HTML</span>
+                <span class="badge bg-success skill-badge">CSS</span>
+                <span class="badge bg-warning text-dark skill-badge">JavaScript</span>
+            </span>
+            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="addSkill()">Add Skill</button>
+        </div>
+        <div class="mt-2">
+            <strong>Hobbies:</strong>
+            <span id="hobbies-list">
+                <span class="badge bg-info text-dark skill-badge">Reading</span>
+                <span class="badge bg-secondary skill-badge">Music</span>
+            </span>
+            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="addHobby()">Add Hobby</button>
+        </div>
+    </div>
+
+    <!-- Daily Routine Section -->
+    <div class="profile-section">
+        <h2>Daily Routine</h2>
+        <table class="table table-bordered routine-table align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Morning</th>
+                    <th>Afternoon</th>
+                    <th>Evening</th>
+                    <th>Night</th>
+                </tr>
+            </thead>
+            <tbody id="routine-body">
+                <tr>
+                    <td>Wake up</td>
+                    <td>Break</td>
+                    <td>Chat</td>
+                    <td>Sleep</td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-sm btn-primary" onclick="addRoutineRow()">Add Routine Row</button>
+    </div>
+</div>
+
+<!-- JavaScript for Interactivity -->
+<script>
+    // Editable profile fields
+    document.querySelectorAll('.editable').forEach(function(element) {
+        element.addEventListener('click', function() {
+            const currentValue = this.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentValue;
+            input.className = 'form-control d-inline w-auto';
+            this.replaceWith(input);
+            input.focus();
+
+            input.addEventListener('blur', function() {
+                const span = document.createElement('span');
+                span.className = 'editable';
+                span.textContent = input.value || currentValue;
+                input.replaceWith(span);
+                // Re-attach event listener
+                span.addEventListener('click', arguments.callee);
+            });
+        });
+    });
+
+    // Add Skill
+    function addSkill() {
+        const skill = prompt("Enter a new tech skill:");
+        if (skill && skill.trim() !== "") {
+            const span = document.createElement('span');
+            span.className = 'badge bg-primary skill-badge';
+            span.textContent = skill;
+            document.getElementById('skills-list').appendChild(span);
+        }
+    }
+
+    // Add Hobby
+    function addHobby() {
+        const hobby = prompt("Enter a new hobby:");
+        if (hobby && hobby.trim() !== "") {
+            const span = document.createElement('span');
+            span.className = 'badge bg-info text-dark skill-badge';
+            span.textContent = hobby;
+            document.getElementById('hobbies-list').appendChild(span);
+        }
+    }
+
+    // Add Routine Row
+    function addRoutineRow() {
+        const times = ['Morning', 'Afternoon', 'Evening', 'Night'];
+        let activities = [];
+        for (let i = 0; i < times.length; i++) {
+            let activity = prompt(`Enter activity for ${times[i]}:`);
+            activities.push(activity ? activity : '');
+        }
+        const tr = document.createElement('tr');
+        activities.forEach(function(act) {
+            const td = document.createElement('td');
+            td.textContent = act;
+            tr.appendChild(td);
+        });
+        document.getElementById('routine-body').appendChild(tr);
+    }
+</script>
+</body>
+</html>
